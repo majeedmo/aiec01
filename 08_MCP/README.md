@@ -155,7 +155,17 @@ Why is OAuth important for MCP servers, and what security considerations should 
 
 #### Answer
 
-_(insert your answer here)_
+As we have seen in our session # 8 demo, MCP tools can read data and change real application state (e.g. cart and checkout). With Streamable HTTP, the server is reachable over the network, so anyone who can hit the URL could invoke those tools unless requests are authenticated.
+
+OAuth answers who is calling and can restrict caller's allowed to do. It ties each tool call to an authenticated user (e.g. cart operations scoped by username from the access token), supports scopes and token revocation, and provides a standard consent flow for remote MCP clients. 
+
+##### Security considerations for AI clients
+1. Auth on sensitive tools — Protect state-changing operations; use least-privilege scopes.
+2. User data isolation — Ensure users cannot access each other’s carts, orders, or accounts.
+3. AI-specific risk — Models may call tools unexpectedly (prompt injection). OAuth limits who is affected; you still need confirmations, narrow tools, and logging for high-impact actions.
+4. Validate inputs — Treat tool arguments like untrusted API input.
+5. Transport and tokens — Use HTTPS, short-lived tokens, correct ISSUER_URL, and secure client-side token storage.
+6. Minimize exposure — Only return data the model truly needs; avoid leaking secrets or excessive PII in tool responses.
 
 ### Question #2
 
@@ -163,7 +173,20 @@ What is Streamable HTTP transport in MCP, and why might you expose a server publ
 
 #### Answer
 
-_(insert your answer here)_
+Streamable HTTP: Clients send MCP JSON-RPC messages via HTTP POST to a single endpoint (e.g. /mcp). The server can respond with JSON or upgrade to SSE for streaming. This lets the MCP server run as a shared network service instead of a local subprocess
+
+##### stdio fits when:
+stdio = “run this tool on local machine for me”
+- The MCP server runs on the same machine as the client (e.g. Claude Desktop spawning a local tool server).
+- There’s no network boundary i.e. the OS process model is the trust boundary.
+- Local access is implicit, typically don’t need OAuth 
+
+##### Public Streamable HTTP + OAuth fits when:
+Streamable HTTP + OAuth = “call this API as a specific user, from anywhere”
+- Clients aren’t on the same machine. For example in our excercise ngrok flow (ISSUER_URL=https://....ngrok-free.app) is exactly this: a client anywhere on the internet can reach the server. stdio can’t do that as there’s no URL to connect to.
+- One server process can serve many users or apps. stdio is usually one client vs. one subprocess.
+
+- authentication: over the network, “anyone who can hit the URL” could call our tools (checkout, add_to_cart, etc.). OAuth gives us additional authentication and validation tools my checking identity, limiting access and controlling token lifecycle. 
 
 ## Activity 1: Extend the MCP Server
 

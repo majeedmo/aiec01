@@ -57,6 +57,14 @@ async def init_db(db: aiosqlite.Connection):
             quantity INTEGER NOT NULL DEFAULT 1,
             UNIQUE(username, product_id)
         );
+        CREATE TABLE IF NOT EXISTS orders (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            username TEXT NOT NULL,
+            status TEXT NOT NULL,
+            items TEXT NOT NULL,
+            total REAL NOT NULL,
+            created_at REAL NOT NULL
+        );
         CREATE TABLE IF NOT EXISTS users (
             username TEXT PRIMARY KEY,
             created_at REAL NOT NULL

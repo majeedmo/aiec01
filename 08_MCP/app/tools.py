@@ -1,4 +1,6 @@
+import json
 import secrets
+from time import time, time_ns
 
 from mcp.server.auth.middleware.auth_context import get_access_token
 
@@ -129,6 +131,7 @@ async def checkout() -> dict:
         return {"error": "Your cart is empty"}
 
     await db.execute("DELETE FROM cart_items WHERE username = ?", (username,))
+    await db.execute("INSERT INTO orders (username, status, items, total, created_at) VALUES (?, ?, ?, ?, ?)", (username, "confirmed", json.dumps(cart["items"]), cart["total"], time_ns() / 1000000000))
     await db.commit()
 
     order_id = secrets.token_hex(8).upper()
@@ -139,3 +142,13 @@ async def checkout() -> dict:
         "total": cart["total"],
         "message": f"Order {order_id} confirmed! Thanks {username}, your cats will love their new goodies!",
     }
+
+@mcp.tool()
+async def order_history() -> dict:
+    """View your order history."""
+    username = await _get_username()
+    db = await oauth_provider._get_db()
+
+    cursor = await db.execute("SELECT * FROM orders WHERE username = ?", (username,))
+    rows = await cursor.fetchall()
+    return [{"order_id": r[0], "status": r[1], "items": r[2], "total": r[3]} for r in rows]
