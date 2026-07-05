@@ -1,0 +1,33 @@
+# Python / agent server
+.venv
+.langgraph_api
+__pycache__
+*.py[cod]
+*.egg-info
+
+# Frontend (deployed separately on Vercel — Option A)
+frontend
+
+# Environment and secrets
+.env
+.env.*
+*.local
+
+# Git and editor
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+
+# Logs and caches
+*.log
+*.tmp
+.cache
+dist
+build
+
+# Docker scaffolding (keep Dockerfile.vercel in the build context)
+Dockerfile.generated
+Dockerfile.compose
+docker-compose.yml
