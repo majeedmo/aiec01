@@ -1,12 +1,6 @@
-# LangGraph agent server image for Vercel Container Functions.
-#
-# Regenerate from langgraph.json when your graphs or dependencies change:
-#   uv run langgraph dockerfile Dockerfile.vercel
-#
-# Vercel routes HTTP traffic to this container and sets $PORT (default 80).
-# The langchain/langgraph-api base image already binds uvicorn to $PORT.
-
 FROM langchain/langgraph-api:3.13
+
+
 
 # -- Adding local package . --
 ADD . /deps/09_Agent_Servers
@@ -16,6 +10,8 @@ ADD . /deps/09_Agent_Servers
 RUN for dep in /deps/*; do             echo "Installing $dep";             if [ -d "$dep" ]; then                 echo "Installing $dep";                 (cd "$dep" && PYTHONDONTWRITEBYTECODE=1 uv pip install --system --no-cache-dir -c /api/constraints.txt -e .);             fi;         done
 # -- End of local dependencies install --
 ENV LANGSERVE_GRAPHS='{"simple_agent": "app.graphs.simple_agent:graph"}'
+
+
 
 # -- Ensure user deps didn't inadvertently overwrite langgraph-api
 RUN mkdir -p /api/langgraph_api /api/langgraph_runtime /api/langgraph_license && touch /api/langgraph_api/__init__.py /api/langgraph_runtime/__init__.py /api/langgraph_license/__init__.py
