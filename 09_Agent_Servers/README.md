@@ -427,8 +427,9 @@ Follow these steps to prepare and submit your homework assignment:
 Why does LangSmith deploy your agent as an API backend only, and why do you still need a separate frontend deployment like Vercel?
 
 #### Answer
+LangSmith deploy focuses on LangGraph agent as an Agent Server API. It handles agent execution, tools, memory, tracing and also exposes programmatic endpoints (threads, runs, streaming). It doesn't serve as a client UI.
 
-_(insert your answer here)_
+Vercel deployment covers the client side e.g. a browser-based chat interface. The frontend calls the agent API (via a server-side Next.js route so API keys stay off the client). Vercel hosts the React/Next.js app and that proxy route.
 
 ### Question #2
 
@@ -436,7 +437,9 @@ Why should the LangSmith API key live in a Next.js API route (server-side) inste
 
 #### Answer
 
-_(insert your answer here)_
+Anything in client-side code (env vars bundled into JS, hardcoded strings) can be read via DevTools, View Source, or the network tab. It is not secret. If keys are leaked, someone could call your LangSmith deployment directly, run your agent, access threads, rack up usage/cost, or abuse your backend.
+
+The advantage of a Next.js API routing is that the browser only calls /api/*, the server adds the LangSmith API key when forwarding the request. The key never reaches the client.
 
 ## Activity 1: Build a Helpfulness Loop in Production
 
