@@ -6,7 +6,9 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "jupyter>=1.1.1",
-    "openai>=1.100.2",
+    "ipykernel>=6.29.0",
+    "openai>=2.0.0,<3.0.0",
+    "instructor>=1.15.0,<2.0.0",
     "fireworks-ai",
     "langchain-fireworks>=0.2.0",
     "langchain-openai>=0.3.0",
@@ -23,4 +25,10 @@ dependencies = [
     "python-dotenv>=1.2.2",
     "langgraph-cli>=0.4.14",
     "langgraph-api>=0.4.28",
+    "pandas>=2.2.0,<4.0.0",
+    "langsmith>=0.3.0",
+    "ragas @ git+https://github.com/vibrantlabsai/ragas.git@b36dd9edbff556c4d5fac88afcc8ac67ccdbe494",
 ]
+
+[tool.uv]
+package = false

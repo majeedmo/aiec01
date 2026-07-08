@@ -83,15 +83,17 @@ What is the difference between serverless and dedicated endpoints?
 
 #### ✅ Answer:
 
-_(insert your answer here)_
+- Serverless endpoints are pre deployed models by vendor (e.g. Fireworks), you pay per token usage, variable latency as infrastructure is shared. No setup is needed as it comes deployed out of the box.
+
+- Dedicated endpoints are provisioned deployment for a user, you pay per hour (usage doesn't matter, you pay per compute time), better performance and low latency as your models are running on dedicated GPUs. 
 
 ### ❓ Question #2:
 
 Why is it important to consider token throughput and latency when choosing an LLM for user-facing applications?
 
 #### ✅ Answer:
+Any user facing application, where response time is important for user experience, must consider LLMs with higher token throughput and lower latency. Lower latency leaves good first impression and better perceived responsiveness. On the other hand higher throughput gives streaming feel, makes long answers appear in reasonable time and also concurrency/capacity. For a good UX experience we need both lower latency and higher throughput; one alone isn’t enough. That's why it's important to compare endpoints before committing in production
 
-_(insert your answer here)_
 
 ## Activity 1: RAGAS Evaluation with Cost Analysis
 
